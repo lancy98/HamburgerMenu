@@ -3,14 +3,14 @@ HamburgerMenu for iOS writtern in swift
 
 Usage
 ========
-Drag the `HamburgerMenu` into your project.
+* Drag the `HamburgerMenu` into your project.
 
-Create an variable in your `Viewcontroller`
+* Create an variable in your `Viewcontroller`
 ```swift
 var slideMenuController: SlideMenuViewController?
 ```
 
-create an instance of `SlideMenuViewController` and add as child view controller
+* create an instance of `SlideMenuViewController` and add as child view controller
 ```swift
 slideMenuController = SlideMenuViewController()
 addChildViewController(slideMenuController)
@@ -22,12 +22,12 @@ view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[slideVie
 view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[slideView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["slideView": slideMenuController.view]))
 ```
 
-Set the datasource of `slideMenuController` to self 
+* Set the datasource of `slideMenuController` to self 
 ```swift
 slideMenuController.datasource = self
 ```
 
-Implement the datasource methods.
+* Implement the datasource methods.
 ```swift
 //Mark: DynamicTrayMenuDataSource
 func mainViewController() -> UIViewController {
