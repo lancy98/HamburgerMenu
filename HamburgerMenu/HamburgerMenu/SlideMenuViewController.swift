@@ -47,6 +47,8 @@ class SlideMenuViewController: UIViewController {
     private let widthFactor = CGFloat(0.4) // 40% width of the view
     private let minThresholdFactor = CGFloat(0.2)
     
+    private var overlayView: UIView?
+    
     private var trayWidth: CGFloat {
         return CGFloat(view.frame.width * widthFactor);
     }
@@ -111,8 +113,10 @@ class SlideMenuViewController: UIViewController {
         toView.addSubview(viewController.view)
         viewController.didMoveToParentViewController(self)
         
-        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
-        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
+        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options:
+            NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
+        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options:
+            NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
     }
     
     
@@ -134,6 +138,54 @@ class SlideMenuViewController: UIViewController {
     private func upadateGravity(isRight: Bool) {
         let angle = isRight ? 0 : M_PI
         gravity!.setAngle(CGFloat(angle), magnitude: 1.0)
+        
+        // Add the overlay if gravity is right
+        if isRight {
+            addOverlayView()
+        } else {
+            removeOverlayView()
+        }
+    }
+    
+    private func addOverlayView() {
+        if overlayView == nil {
+            // Create overlay view.
+            overlayView = UIView.new()
+            overlayView!.backgroundColor = UIColor.blackColor()
+            overlayView!.alpha = 0.0
+            overlayView!.setTranslatesAutoresizingMaskIntoConstraints(false)
+            mainViewController!.view.addSubview(overlayView!)
+            
+            // Fill the parent.
+            mainViewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options:
+                NSLayoutFormatOptions(0), metrics: nil, views: ["view": overlayView!]))
+             mainViewController!.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options:
+                NSLayoutFormatOptions(0), metrics: nil, views: ["view": overlayView!]))
+            
+            // Add Tap Gesture
+            let tapGesture = UITapGestureRecognizer(target: self, action: Selector("overlayTapped:"))
+            overlayView!.addGestureRecognizer(tapGesture)
+            
+            // animate with alpha
+            UIView.animateWithDuration(0.4) {
+                self.overlayView!.alpha = 0.4
+            }
+        }
+    }
+    
+    private func removeOverlayView() {
+        if overlayView != nil {
+            UIView.animateWithDuration(0.4, animations: {
+                self.overlayView!.alpha = 0.0
+            }, completion: { completed in
+                self.overlayView!.removeFromSuperview()
+                self.overlayView = nil
+            })
+        }
+    }
+    
+    func overlayTapped(tapGesture: UITapGestureRecognizer) {
+        tray(false) // hide the tray.
     }
     
     private func setUpTrayView() {

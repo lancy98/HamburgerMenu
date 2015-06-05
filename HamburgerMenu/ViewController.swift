@@ -44,8 +44,10 @@ class ViewController: UIViewController, DynamicTrayMenuDataSource {
         toView.addSubview(viewController.view)
         viewController.didMoveToParentViewController(self)
         
-        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
-        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
+        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[view]|", options:
+            NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
+        toView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options:
+            NSLayoutFormatOptions(0), metrics: nil, views: ["view": viewController.view]))
     }
     
     //Mark: DynamicTrayMenuDataSource
